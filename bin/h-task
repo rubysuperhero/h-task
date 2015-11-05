@@ -90,7 +90,7 @@ module CliTasks
         File.join(git_root, 'tasks'),
         File.join(hero_path, 'tasks'),
       ].find do |p|
-        File.exist?(p) && File.directory?(p)
+        !(File.exist?(p) && File.directory?(p))
       end || File.join(git_root, 'tasks')
     end
 
@@ -99,12 +99,16 @@ module CliTasks
     end
 
     def generate_default_path
+      ap COMMAND_NAME: command_name
       case command_name
       when /(h-)?notes?/i
+        ap notes: :notes
         default_notes_path
       when /(h-)?tasks?/i
+        ap tasks: :tasks, default_tasks_path: default_tasks_path
         default_tasks_path
       when /(h-)?tips?/i
+        ap tips: :tips
         default_tips_path
       else
         ap message: 'Unable to match %s against one of case%ss branches' % [command_name, ?'],
